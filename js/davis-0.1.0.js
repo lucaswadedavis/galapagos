@@ -104,7 +104,8 @@ mutate:function(x,p){
 darwin:function(mutation,ancestry)
 	{
 	var anar=ancestry.length;
-	var m=(9*anar*anar)/((anar*anar)+100);
+	// original var m=(9*anar*anar)/((anar*anar)+100);
+	var m=(9*anar*anar)/((anar*anar)+50);
 	var d=1+this.random(10);
 	if (m>d){ return this.pick(ancestry);}
 	else{ return this.pick(mutation);}

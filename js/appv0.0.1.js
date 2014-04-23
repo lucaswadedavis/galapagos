@@ -9,11 +9,13 @@ var app={m:{},v:{},c:{}};
 
 /////////////////////////////////////////////////////////////////////////////////
 
+app.m.genePool=[];
+app.m.activeSubject;
 
 /////////////////////////////////////////////////////////////////////////////////
 
 app.c.init=function(){
-	app.m.metadata={"name":"Galapagos","version":"0.0.1"};
+	app.m.metadata={"name":"Galapagos","version":"0.0.2"};
 	var b=app.c.bounds();
 };
 
@@ -21,6 +23,12 @@ app.c.listeners=function(){
 	$("#mitLicense").on("click",function(){
 		$("#license").slideToggle();
 	});
+
+	$("body").keyup(function(e){
+		console.log(e.which);
+		if (e.which==76){app.m.genePool.push(app.m.activeSubject); app.c.clearContext(); app.v.init(); }
+		else if (e.which==78){app.c.clearContext(); app.v.init(); }
+	})
 
 };
 
@@ -36,9 +44,9 @@ app.c.bounds=function(){
 	return b;
 };
 
-
-
-
+app.c.clearContext=function(){
+	$("body").html(" ");
+}
 
 
 
@@ -236,6 +244,22 @@ app.v.init=function(){
 		davis.maybe(1,2,function(){g.codon="torus";});		
 		davis.maybe(1,3,function(){g.codon="cylinder";});
 
+		g.codon=davis.darwin([g.codon],_.filter(app.m.genePool,function(n){
+			return n[i].codon;
+		}));
+
+
+		g.r=davis.mutate(davis.darwin([g.r],_.filter(app.m.genePool,function(n){
+			return n[i].r;
+		})));
+		g.thickness=davis.mutate(davis.darwin([g.thickness],_.filter(app.m.genePool,function(n){
+			return n[i].thickness;
+		})));
+
+		g.features=davis.darwin([g.features],_.filter(app.m.genePool,function(n){
+			return n[i].features;
+		}));
+
 		if (i==0){
 			g.codon="torus";
 			g.r=2;
@@ -250,6 +274,8 @@ app.v.init=function(){
 
 		genome.push(g);
 	}
+
+	app.m.activeSubject=genome;
 
 /////////////////////////////////////
 	
